@@ -275,6 +275,22 @@
     transition:transform .15s ease, background .15s ease;
   }
   .cta-btn:hover{ background:var(--gold); transform:translateY(-2px); }
+  .cta-btn.secondary{
+    background:transparent;
+    color:var(--trace-light);
+    border:1.5px solid var(--trace-light);
+  }
+  .cta-btn.secondary:hover{
+    background:rgba(79,155,181,0.12);
+    color:var(--pad);
+    border-color:var(--gold);
+  }
+  .cta-actions{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    flex-wrap:wrap;
+  }
 
   footer{
     text-align:center;
@@ -379,10 +395,15 @@
 
   <section>
     <div class="cta-box">
-      <p>¿Vas a participar del pedido? Únete al grupo de WhatsApp para coordinar y recibir todas las actualizaciones.</p>
-      <a class="cta-btn" href="https://chat.whatsapp.com/FZXxKzeynGi3PnwL0lLoVe" target="_blank" rel="noopener">
-        Unirme al grupo de WhatsApp →
-      </a>
+      <p>¿Vas a participar del pedido? Únete al grupo de WhatsApp para coordinar, y completa el formulario antes del deadline del mes.</p>
+      <div class="cta-actions">
+        <a class="cta-btn" href="https://chat.whatsapp.com/FZXxKzeynGi3PnwL0lLoVe" target="_blank" rel="noopener">
+          Unirme al grupo de WhatsApp →
+        </a>
+        <a class="cta-btn secondary" href="https://forms.gle/9VKuN4mGPMaBAxcUA" target="_blank" rel="noopener">
+          Llenar el formulario →
+        </a>
+      </div>
     </div>
   </section>
 

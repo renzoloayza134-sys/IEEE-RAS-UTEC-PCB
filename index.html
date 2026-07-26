@@ -74,17 +74,24 @@
     margin-top:34px;
     flex-wrap:wrap;
   }
-  .chip{
-    width:108px;
-    height:108px;
-    background:var(--ink);
-    border:2px solid var(--copper);
-    border-radius:10px;
+.chip{
+    width:140px;
+    height:140px;
+    background:transparent;
+    border:none;
     display:flex;
     align-items:center;
     justify-content:center;
-    position:relative;
-  }
+}
+
+.chip img{
+    max-width:100%;
+    max-height:100%;
+    width:auto;
+    height:auto;
+    object-fit:contain;
+    display:block;
+}
   .chip::before, .chip::after{
     content:"";
     position:absolute;

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Envío PCB · RAS &amp; CAS UTEC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --board:#0b3d2b;
+    --board-dark:#082a1d;
+    --trace:#2f8f63;
+    --trace-light:#4fb583;
+    --copper:#c9932f;
+    --gold:#e8b854;
+    --silk:#eef1e6;
+    --ink:#0c1a14;
+    --pad:#f2efe4;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--board);
+    background-image:
+      linear-gradient(var(--board-dark) 1px, transparent 1px),
+      linear-gradient(90deg, var(--board-dark) 1px, transparent 1px);
+    background-size: 34px 34px;
+    color:var(--silk);
+    font-family:var(--sans);
+    line-height:1.5;
+    min-height:100vh;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:920px; margin:0 auto; padding:48px 24px 80px;}
+
+  /* Header */
+  header{text-align:center; margin-bottom:56px;}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--trace-light);
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:clamp(28px,6vw,46px);
+    color:var(--pad);
+    letter-spacing:-0.01em;
+  }
+  h1 span{color:var(--gold);}
+  .subtitle{
+    max-width:520px;
+    margin:16px auto 0;
+    color:#bcd3c6;
+    font-size:15px;
+  }
+
+  /* Chips (logos) */
+  .chips{
+    display:flex;
+    justify-content:center;
+    gap:22px;
+    margin-top:34px;
+    flex-wrap:wrap;
+  }
+  .chip{
+    width:108px;
+    height:108px;
+    background:var(--ink);
+    border:2px solid var(--copper);
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .chip::before, .chip::after{
+    content:"";
+    position:absolute;
+    background:var(--copper);
+  }
+  .chip::before{ width:100%; height:2px; top:-2px; left:0; opacity:0;}
+  .chip-label{
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:22px;
+    color:var(--gold);
+    letter-spacing:.05em;
+  }
+  .chip-leads{
+    position:absolute;
+    inset:-8px;
+    pointer-events:none;
+  }
+  .chip-sub{
+    font-family:var(--mono);
+    font-size:10px;
+    color:#7fae95;
+    text-align:center;
+    margin-top:8px;
+    letter-spacing:.08em;
+  }
+  .chip-col{display:flex; flex-direction:column; align-items:center;}
+
+  /* Section shared */
+  section{margin-bottom:64px;}
+  .section-head{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:26px;
+  }
+  .tag{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--board-dark);
+    background:var(--trace-light);
+    padding:4px 10px;
+    border-radius:4px;
+    font-weight:600;
+    letter-spacing:.05em;
+  }
+  .section-head h2{
+    font-family:var(--mono);
+    font-size:20px;
+    color:var(--pad);
+    font-weight:600;
+  }
+  .rule{
+    height:1px;
+    background:linear-gradient(90deg, var(--trace) 0%, transparent 100%);
+    flex:1;
+  }
+
+  /* Reference photos */
+  .photo-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+    gap:16px;
+  }
+  .photo-slot{
+    aspect-ratio:4/3;
+    border:1.5px dashed rgba(232,184,84,0.45);
+    border-radius:8px;
+    background:rgba(255,255,255,0.02);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    color:#8fae9e;
+    font-family:var(--mono);
+    font-size:11px;
+    text-align:center;
+    padding:10px;
+  }
+  .photo-slot .icon{
+    font-size:22px;
+    opacity:.6;
+  }
+
+  /* Calendar / trace timeline */
+  .timeline{
+    position:relative;
+    padding-left:8px;
+  }
+  .trace-line{
+    position:absolute;
+    left:29px;
+    top:14px;
+    bottom:14px;
+    width:2px;
+    background: repeating-linear-gradient(
+      to bottom,
+      var(--trace) 0px, var(--trace) 6px, transparent 6px, transparent 12px
+    );
+  }
+  .stop{
+    display:flex;
+    align-items:flex-start;
+    gap:20px;
+    position:relative;
+    padding:14px 0;
+  }
+  .pad{
+    width:60px;
+    height:60px;
+    flex:none;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--gold), var(--copper) 70%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:11px;
+    color:var(--ink);
+    text-align:center;
+    line-height:1.15;
+    box-shadow:0 0 0 4px var(--board), 0 0 0 5px rgba(232,184,84,0.25);
+    z-index:1;
+  }
+  .stop-info{
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(79,181,131,0.25);
+    border-radius:8px;
+    padding:14px 18px;
+    flex:1;
+    margin-top:4px;
+  }
+  .stop-info .date{
+    font-family:var(--mono);
+    color:var(--gold);
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .stop-info .desc{
+    font-size:14px;
+    color:#d7e6dd;
+  }
+  .stop.deadline .pad{
+    background:radial-gradient(circle at 35% 30%, #ff9a6b, #c9552f 70%);
+    box-shadow:0 0 0 4px var(--board), 0 0 0 5px rgba(255,138,90,0.3);
+  }
+  .stop.deadline .stop-info{border-color:rgba(255,138,90,0.3);}
+  .stop.deadline .date{color:#ffb28a;}
+
+  /* CTA */
+  .cta-box{
+    text-align:center;
+    background:linear-gradient(180deg, rgba(47,143,99,0.12), rgba(47,143,99,0.02));
+    border:1px solid rgba(79,181,131,0.3);
+    border-radius:14px;
+    padding:42px 24px;
+  }
+  .cta-box p{color:#bcd3c6; margin-bottom:22px; font-size:14px;}
+  .cta-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--trace-light);
+    color:var(--board-dark);
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:14px;
+    padding:14px 28px;
+    border-radius:8px;
+    letter-spacing:.02em;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .cta-btn:hover{ background:var(--gold); transform:translateY(-2px); }
+
+  footer{
+    text-align:center;
+    margin-top:60px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:#5f8271;
+    letter-spacing:.05em;
+  }
+
+  @media (max-width:520px){
+    .chip{width:88px; height:88px;}
+    .pad{width:50px; height:50px; font-size:10px;}
+    .trace-line{left:24px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">// Pedido conjunto de fabricación</div>
+    <h1>Envío de <span>PCB</span></h1>
+    <p class="subtitle">Coordinación del pedido grupal de placas entre los capítulos IEEE RAS y CAS de UTEC. Aquí encuentras el calendario de fechas límite y el grupo de coordinación.</p>
+
+    <div class="chips">
+      <div class="chip-col">
+        <div class="chip"><span class="chip-label">RAS</span></div>
+        <div class="chip-sub">ROBOTICS &amp; AUTOMATION</div>
+      </div>
+      <div class="chip-col">
+        <div class="chip"><span class="chip-label">CAS</span></div>
+        <div class="chip-sub">CIRCUITS &amp; SYSTEMS</div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <span class="tag">REF</span>
+      <h2>Fotos referenciales</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-slot"><span class="icon">🖼</span>Foto referencial 1</div>
+      <div class="photo-slot"><span class="icon">🖼</span>Foto referencial 2</div>
+      <div class="photo-slot"><span class="icon">🖼</span>Foto referencial 3</div>
+      <div class="photo-slot"><span class="icon">🖼</span>Foto referencial 4</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="tag">CAL</span>
+      <h2>Calendario de envío</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="timeline">
+      <div class="trace-line"></div>
+      <div class="stop deadline">
+        <div class="pad">AGO<br>07</div>
+        <div class="stop-info">
+          <div class="date">Agosto 7 — Deadline</div>
+          <div class="desc">Cierre del formulario (forms) de inscripción para el pedido de PCB.</div>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="pad">SET<br>18</div>
+        <div class="stop-info">
+          <div class="date">Setiembre 18</div>
+          <div class="desc">Siguiente hito del proceso de fabricación.</div>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="pad">OCT<br>23</div>
+        <div class="stop-info">
+          <div class="date">Octubre 23</div>
+          <div class="desc">Siguiente hito del proceso de fabricación.</div>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="pad">NOV<br>13</div>
+        <div class="stop-info">
+          <div class="date">Noviembre 13</div>
+          <div class="desc">Siguiente hito del proceso de fabricación.</div>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="pad">DIC<br>11</div>
+        <div class="stop-info">
+          <div class="date">Diciembre 11</div>
+          <div class="desc">Cierre final del proceso de envío de PCB.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="cta-box">
+      <p>¿Vas a participar del pedido? Únete al grupo de WhatsApp para coordinar y recibir todas las actualizaciones.</p>
+      <a class="cta-btn" href="https://chat.whatsapp.com/FZXxKzeynGi3PnwL0lLoVe" target="_blank" rel="noopener">
+        Unirme al grupo de WhatsApp →
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    IEEE RAS × IEEE CAS — UTEC
+  </footer>
+
+</div>
+</body>
+</html>
